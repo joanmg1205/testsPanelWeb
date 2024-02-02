@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../transaction/transaction_screen.dart';
 import 'components/side_menu.dart';
+import '../modify_card/modify_card_screen.dart';
 
 class MainScreen extends StatelessWidget {
   final _beamerKey = GlobalKey<BeamerState>();
@@ -33,10 +34,19 @@ class MainScreen extends StatelessWidget {
                 key: _beamerKey,
                 routerDelegate: BeamerDelegate(
                   transitionDelegate: const NoAnimationTransitionDelegate(),
-                  locationBuilder: (routeInformation, _) =>
-                    routeInformation.location!.contains('dashboard')
-                      ? DashboardLocation(routeInformation)
-                      : TransactionLocation(routeInformation),
+                  locationBuilder: (routeInformation, _) {
+                    if(routeInformation.location!.contains('dashboard'))
+                      return DashboardLocation(routeInformation);
+                    else if(routeInformation.location!.contains('transaction'))
+                      return TransactionLocation(routeInformation);
+                    else if(routeInformation.location!.contains('modifycard'))
+                      return ModifyCardLocation(routeInformation);
+                    else 
+                      return DashboardLocation(routeInformation);
+                    }
+                    //routeInformation.location!.contains('dashboard')
+                    //  ? DashboardLocation(routeInformation)
+                    //  : TransactionLocation(routeInformation),
                 ),
               ),
             ),
@@ -75,6 +85,22 @@ class TransactionLocation extends BeamLocation<BeamState> {
       key: ValueKey('transaction'),
       title: 'transaction',
       child: TransactionScreen(),
+    )
+  ];
+}
+
+class ModifyCardLocation extends BeamLocation<BeamState> {
+  ModifyCardLocation(RouteInformation routeInformation) : super(routeInformation);
+
+  @override
+  List<String> get pathPatterns => ['/modifycard/*'];
+
+  @override
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
+    BeamPage(
+      key: ValueKey('modifycard'),
+      title: 'modifycard',
+      child: ModifyCardScreen(),
     )
   ];
 }

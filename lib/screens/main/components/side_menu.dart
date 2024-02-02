@@ -33,15 +33,13 @@ class SideMenu extends StatelessWidget {
             title: "Task",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {
-
+              Beamer.of(context).beamToNamed('/modifycard');
             },
           ),
           DrawerListTile(
             title: "Documents",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {
-
-            },
+            press: () {},
           ),
           DrawerListTile(
             title: "Store",
