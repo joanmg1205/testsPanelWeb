@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
@@ -13,6 +14,16 @@ class FormComponent extends StatefulWidget {
 
 class _FormComponentState extends State<FormComponent> {
   List auxKey = [1, 2];
+  ScrollController _scrollController1 = new ScrollController();
+  ScrollController _scrollController2 = new ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // import initial data from here
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -21,11 +32,42 @@ class _FormComponentState extends State<FormComponent> {
         key: _formKey,
         child: Column(
           children: [
-            TextFormField(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Organization Name',
+              ),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
             SizedBox(height: defaultPadding),
-            TextFormField(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Description',
+              ),
+            ),
+            TextFormField(
+              maxLines: 8,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
             SizedBox(height: defaultPadding),
-            TextFormField(),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Logo Text',
+              ),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
             SizedBox(height: defaultPadding),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,18 +79,57 @@ class _FormComponentState extends State<FormComponent> {
                     SizedBox(
                       height: 400,
                       width: 200,
-                      child: ListView.builder(
-                        itemCount: auxKey.length,
-                        itemBuilder: (context, index) {
-                          SizedBox(height: defaultPadding);
-                          Column(
-                            children: [
-                              TextField(),
-                              TextField(),
-                              TextField(),
-                            ],
-                          );
-                        },
+                      child: Scrollbar(
+                        thumbVisibility: true,
+                        controller: _scrollController1 ,
+                        child: ListView.builder(
+                          controller: _scrollController1,
+                          itemCount: auxKey.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(defaultPadding / 2),
+                              child: Card(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Key',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Label',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Value',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -60,16 +141,57 @@ class _FormComponentState extends State<FormComponent> {
                     SizedBox(
                       height: 400,
                       width: 200,
-                      child: ListView.builder(
-                        itemCount: auxKey.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              SizedBox(height: defaultPadding),
-                              Text('hola'),
-                            ],
-                          );
-                        },
+                      child: Scrollbar(
+                        thumbVisibility: true,
+                        controller: _scrollController2 ,
+                        child: ListView.builder(
+                          controller: _scrollController2,
+                          itemCount: auxKey.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(defaultPadding / 2),
+                              child: Card(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Key',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Label',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Value',
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     ElevatedButton.icon(
