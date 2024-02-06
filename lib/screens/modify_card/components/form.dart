@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 
 class FormComponent extends StatefulWidget {
   const FormComponent({
@@ -13,10 +14,14 @@ class FormComponent extends StatefulWidget {
 }
 
 class _FormComponentState extends State<FormComponent> {
-  List auxKey = [1, 2];
-  ScrollController _scrollController1 = new ScrollController();
-  ScrollController _scrollController2 = new ScrollController();
-
+  TextEditingController _controller = new TextEditingController();
+  TextEditingController _controller1 = new TextEditingController();
+  TextEditingController _controller2 = new TextEditingController();
+  TextEditingController _controller3 = new TextEditingController();
+  TextEditingController _controller4 = new TextEditingController();
+  TextEditingController _controller5 = new TextEditingController();
+  TextEditingController _controller6 = new TextEditingController();
+  TextEditingController _controller7 = new TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -26,222 +31,210 @@ class _FormComponentState extends State<FormComponent> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-    return Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
+    return Container(
+      margin: EdgeInsets.all(defaultPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Diseño de la tarjeta',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          SizedBox(height: defaultPadding),
+          Row(children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5,
               child: Text(
-                'Organization Name',
+                'Imagen de logotipo',
               ),
             ),
-            TextFormField(
+            ElevatedButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: () async {
+                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                },
+                label: Text('Subir')),
+          ]),
+          SizedBox(height: defaultPadding),
+          Row(children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5,
+              child: Text(
+                'Imagen destacada',
+              ),
+            ),
+            ElevatedButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: () async {
+                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                },
+                label: Text('Subir')),
+          ]),
+          SizedBox(height: defaultPadding),
+          Row(children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5,
+              child: Text(
+                'Imagen denominativa',
+              ),
+            ),
+            ElevatedButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: () async {
+                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                },
+                label: Text('Subir')),
+          ]),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Color de fondo',
+            ),
+          ),
+          TextField(
+            controller: _controller3,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Datos de la tarjeta',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Puntos iniciales',
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: TextField(
+              controller: _controller4,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                String newValue = '';
+                for (var i = 0; i < value.length; i++) {
+                  var c = value[i];
+                  if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9') {
+                    newValue += c;
+                  }
+                }
+                _controller4.value = TextEditingValue(
+                  text: newValue,
+                  selection: TextSelection.fromPosition(
+                    TextPosition(offset: newValue.length),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Nombre de los puntos',
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: TextField(
+              controller: _controller5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: defaultPadding),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Description',
-              ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Titulo de la tarjeta',
             ),
-            TextFormField(
-              maxLines: 8,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: TextField(
+              controller: _controller6,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: defaultPadding),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Logo Text',
-              ),
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Subtitulo de la tarjeta',
             ),
-            TextFormField(
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+            child: TextField(
+              controller: _controller7,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: defaultPadding),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    Text('Auxiliary Fields'),
-                    SizedBox(height: defaultPadding),
-                    SizedBox(
-                      height: 400,
-                      width: 200,
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        controller: _scrollController1 ,
-                        child: ListView.builder(
-                          controller: _scrollController1,
-                          itemCount: auxKey.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(defaultPadding / 2),
-                              child: Card(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Key',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Label',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Value',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            ElevatedButton.icon(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 1.5,
+                  vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                 ),
-                Column(
-                  children: [
-                    Text('Back Fields'),
-                    SizedBox(height: defaultPadding),
-                    SizedBox(
-                      height: 400,
-                      width: 200,
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        controller: _scrollController2 ,
-                        child: ListView.builder(
-                          controller: _scrollController2,
-                          itemCount: auxKey.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(defaultPadding / 2),
-                              child: Card(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Key',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Label',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Value',
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    ElevatedButton.icon(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding * 1.5,
-                          vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                        ),
-                      ),
-                      onPressed: () {
-                        print(auxKey);
-                        setState(() {
-                          auxKey.add(1);
-                        });
-                      },
-                      icon: Icon(Icons.add),
-                      label: Text("Add New"),
-                    ),
-                  ],
-                )
-              ],
+              ),
+              onPressed: () {
+                print(_controller.text);
+              },
+              icon: Icon(Icons.save),
+              label: Text("Save changes"),
             ),
             SizedBox(
-              height: defaultPadding,
+              width: defaultPadding,
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              ElevatedButton.icon(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 1.5,
-                    vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                  ),
+            ElevatedButton.icon(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding * 1.5,
+                  vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                 ),
-                onPressed: () {},
-                icon: Icon(Icons.save),
-                label: Text("Save changes"),
               ),
-              ElevatedButton.icon(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 1.5,
-                    vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                  ),
-                ),
-                onPressed: () {},
-                icon: Icon(Icons.cancel),
-                label: Text("Cancel changes"),
-              ),
-            ])
-          ],
-        ));
+              onPressed: () {},
+              icon: Icon(Icons.cancel),
+              label: Text("Cancel changes"),
+            ),
+          ])
+        ],
+      ),
+    );
   }
 }
