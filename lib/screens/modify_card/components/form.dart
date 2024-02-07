@@ -1,3 +1,4 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';
@@ -22,6 +23,7 @@ class _FormComponentState extends State<FormComponent> {
   TextEditingController _controller5 = new TextEditingController();
   TextEditingController _controller6 = new TextEditingController();
   TextEditingController _controller7 = new TextEditingController();
+  Color color = Colors.blue;
   @override
   void initState() {
     // TODO: implement initState
@@ -91,17 +93,21 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             height: defaultPadding,
           ),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Color de fondo',
-            ),
-          ),
-          TextField(
-            controller: _controller3,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-            ),
+          Row(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 6,
+                child: Text(
+                  'Color de fondo',
+                ),
+              ),
+              ColorPicker(
+                  color: color,
+                  pickersEnabled: {ColorPickerType.primary: false, ColorPickerType.accent: false, ColorPickerType.wheel: true},
+                  onColorChanged: (Color color) => setState(() {
+                        this.color = color;
+                      })),
+            ],
           ),
           SizedBox(
             height: defaultPadding,
@@ -213,7 +219,9 @@ class _FormComponentState extends State<FormComponent> {
                 ),
               ),
               onPressed: () {
-                print(_controller.text);
+                print(color.hexAlpha);
+                print(color.hex);
+                print(color);
               },
               icon: Icon(Icons.save),
               label: Text("Save changes"),
