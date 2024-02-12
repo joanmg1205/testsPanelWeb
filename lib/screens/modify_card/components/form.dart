@@ -1,9 +1,10 @@
+import 'package:admin/utils/wscalls.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormComponent extends StatefulWidget {
   const FormComponent({
@@ -15,21 +16,31 @@ class FormComponent extends StatefulWidget {
 }
 
 class _FormComponentState extends State<FormComponent> {
-  TextEditingController _controller = new TextEditingController();
-  TextEditingController _controller1 = new TextEditingController();
-  TextEditingController _controller2 = new TextEditingController();
-  TextEditingController _controller3 = new TextEditingController();
-  TextEditingController _controller4 = new TextEditingController();
-  TextEditingController _controller5 = new TextEditingController();
-  TextEditingController _controller6 = new TextEditingController();
-  TextEditingController _controller7 = new TextEditingController();
+  late XFile imageLogotipo;
+  late XFile imageDestacada;
+  late XFile imageDenominativa;
+  TextEditingController _puntosiniciales = new TextEditingController();
+  TextEditingController _nombrepuntos = new TextEditingController();
+  TextEditingController _titulotarjeta = new TextEditingController();
+  TextEditingController _subtitulotarjeta = new TextEditingController();
   Color color = Colors.blue;
+  String id = "0";
+  
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // import initial data from here
-  }
+void initState() {
+  super.initState();
+  fetchData();
+}
+
+void fetchData() async {
+  Map<String, dynamic> data = await Wscalls.getClass(id);
+  setState(() {
+    _puntosiniciales.text = data['pointsStart'];
+    _nombrepuntos.text = data['pointsLabel'];
+    _titulotarjeta.text = data['title'];
+    _subtitulotarjeta.text = data['subtitle'];
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +67,12 @@ class _FormComponentState extends State<FormComponent> {
             ElevatedButton.icon(
                 icon: Icon(Icons.image),
                 onPressed: () async {
-                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                  XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      imageLogotipo = image;
+                    });
+                  }
                 },
                 label: Text('Subir')),
           ]),
@@ -71,7 +87,12 @@ class _FormComponentState extends State<FormComponent> {
             ElevatedButton.icon(
                 icon: Icon(Icons.image),
                 onPressed: () async {
-                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                  XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      imageDestacada = image;
+                    });
+                  }
                 },
                 label: Text('Subir')),
           ]),
@@ -86,7 +107,12 @@ class _FormComponentState extends State<FormComponent> {
             ElevatedButton.icon(
                 icon: Icon(Icons.image),
                 onPressed: () async {
-                  Image? fromPicker = await ImagePickerWeb.getImageAsWidget();
+                  XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  if (image != null) {
+                    setState(() {
+                      imageDenominativa = image;
+                    });
+                  }
                 },
                 label: Text('Subir')),
           ]),
@@ -131,7 +157,7 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             width: MediaQuery.of(context).size.width / 3,
             child: TextField(
-              controller: _controller4,
+              controller: _puntosiniciales,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -144,7 +170,7 @@ class _FormComponentState extends State<FormComponent> {
                     newValue += c;
                   }
                 }
-                _controller4.value = TextEditingValue(
+                _puntosiniciales.value = TextEditingValue(
                   text: newValue,
                   selection: TextSelection.fromPosition(
                     TextPosition(offset: newValue.length),
@@ -165,7 +191,7 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             width: MediaQuery.of(context).size.width / 3,
             child: TextField(
-              controller: _controller5,
+              controller: _nombrepuntos,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -183,7 +209,7 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             width: MediaQuery.of(context).size.width / 3,
             child: TextField(
-              controller: _controller6,
+              controller: _titulotarjeta,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -201,7 +227,7 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             width: MediaQuery.of(context).size.width / 3,
             child: TextField(
-              controller: _controller7,
+              controller: _subtitulotarjeta,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -210,37 +236,31 @@ class _FormComponentState extends State<FormComponent> {
           SizedBox(
             height: defaultPadding,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            ElevatedButton.icon(
+          Center(
+            child: ElevatedButton.icon(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(
                   horizontal: defaultPadding * 1.5,
                   vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
                 ),
               ),
-              onPressed: () {
-                print(color.hexAlpha);
-                print(color.hex);
-                print(color);
+              onPressed: () async {
+                String result = await Wscalls.updateClass(
+                    imageLogo: imageLogotipo,
+                    imageHero: imageDestacada,
+                    imageWordMark: imageDenominativa,
+                    backgroundColor: color.hex,
+                    pointsStart: _puntosiniciales.text,
+                    pointsLabel: _nombrepuntos.text,
+                    title: _titulotarjeta.text,
+                    subtitle: _subtitulotarjeta.text,
+                    id: '0');
+                print(result);
               },
               icon: Icon(Icons.save),
               label: Text("Save changes"),
             ),
-            SizedBox(
-              width: defaultPadding,
-            ),
-            ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
-              ),
-              onPressed: () {},
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel changes"),
-            ),
-          ])
+          ),
         ],
       ),
     );
