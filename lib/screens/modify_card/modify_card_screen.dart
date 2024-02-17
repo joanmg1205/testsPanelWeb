@@ -1,4 +1,4 @@
-import 'package:admin/screens/modify_card/components/form.dart';
+import 'package:admin/screens/modify_card/components/form_screen.dart';
 import 'package:admin/screens/modify_card/components/header.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';

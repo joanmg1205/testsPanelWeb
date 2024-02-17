@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_native_image/flutter_native_image.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:http/http.dart' as http;
 
 class Wscalls {
-  static String dirurl = 'https://wallets.snowcode.app';
+  static String baseUrl = 'https://wallets.snowcode.app';
 
   static Future<String> updateClass({
     required XFile imageLogo,
@@ -18,7 +17,7 @@ class Wscalls {
     required String subtitle,
     required String id,
   }) async {
-    final url = Uri.parse('$dirurl/updateClass');
+    final url = Uri.parse('$baseUrl/updateClass');
 
     try {
       final request = http.MultipartRequest('POST', url);
@@ -60,7 +59,7 @@ class Wscalls {
   }
 
   static Future<Map<String, dynamic>> getClass(String idClass) async {
-    final url = Uri.parse('$dirurl/getClass?idClass=$idClass');
+    final url = Uri.parse('$baseUrl/getClass?idClass=$idClass');
 
     try {
       final response = await http.get(url);
@@ -73,6 +72,24 @@ class Wscalls {
       }
     } catch (e) {
       throw Exception('Failed to connect to the server: $e');
+    }
+  }
+
+  static Future<String> createCompany(String companyName, String phone, String passTypeIdentifier) async {
+    try {
+      // Make the HTTP POST request
+      final response = await http.post(
+        Uri.parse('$baseUrl/create_company/$companyName/$phone/$passTypeIdentifier'),
+      );
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, return the company ID
+        return response.body;
+      } else {
+        // If the server returns an error response, throw an exception
+        throw Exception('Failed to create company: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      throw Exception('Error creating company: $e');
     }
   }
 }

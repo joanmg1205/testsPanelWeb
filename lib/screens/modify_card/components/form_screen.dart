@@ -23,24 +23,26 @@ class _FormComponentState extends State<FormComponent> {
   TextEditingController _nombrepuntos = new TextEditingController();
   TextEditingController _titulotarjeta = new TextEditingController();
   TextEditingController _subtitulotarjeta = new TextEditingController();
+  bool showColors = false;
   Color color = Colors.blue;
+  late Color colorSelector;
   String id = "0";
-  
-  @override
-void initState() {
-  super.initState();
-  fetchData();
-}
 
-void fetchData() async {
-  Map<String, dynamic> data = await Wscalls.getClass(id);
-  setState(() {
-    _puntosiniciales.text = data['pointsStart'];
-    _nombrepuntos.text = data['pointsLabel'];
-    _titulotarjeta.text = data['title'];
-    _subtitulotarjeta.text = data['subtitle'];
-  });
-}
+  @override
+  void initState() {
+    super.initState();
+    //fetchData();
+  }
+
+  void fetchData() async {
+    Map<String, dynamic> data = await Wscalls.getClass(id);
+    setState(() {
+      _puntosiniciales.text = data['pointsStart'];
+      _nombrepuntos.text = data['pointsLabel'];
+      _titulotarjeta.text = data['title'];
+      _subtitulotarjeta.text = data['subtitle'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,17 +124,48 @@ void fetchData() async {
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width / 6,
+                width: MediaQuery.of(context).size.width / 5,
                 child: Text(
                   'Color de fondo',
                 ),
               ),
-              ColorPicker(
-                  color: color,
-                  pickersEnabled: {ColorPickerType.primary: false, ColorPickerType.accent: false, ColorPickerType.wheel: true},
-                  onColorChanged: (Color color) => setState(() {
-                        this.color = color;
-                      })),
+              ElevatedButton.icon(
+                  icon: Icon(Icons.image),
+                  onPressed: () {
+                    colorSelector = color;
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => Dialog(
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Column(children: [
+                                SizedBox(height: defaultPadding,),
+                                ColorPicker(
+                                    color: colorSelector,
+                                    pickersEnabled: {ColorPickerType.primary: false, ColorPickerType.accent: false, ColorPickerType.wheel: true},
+                                    onColorChanged: (Color color) => setState(() {
+                                          colorSelector = color;
+                                        })),
+                                SizedBox(height: defaultPadding,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(onPressed: (() {
+                                      Navigator.pop(context);
+                                    }), child: Text('Cancel')),
+                                    SizedBox(width: defaultPadding),
+                                    TextButton(onPressed: (() {
+                                      setState(() {
+                                        color = colorSelector;
+                                      });
+                                      Navigator.pop(context);
+                                    }), child: Text('Save')),
+                                  ],
+                                ),
+                              ]),
+                            ),
+                          ));},
+                  label: Text('Mostrar')),
             ],
           ),
           SizedBox(
@@ -236,30 +269,28 @@ void fetchData() async {
           SizedBox(
             height: defaultPadding,
           ),
-          Center(
-            child: ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
+          ElevatedButton.icon(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(
+                horizontal: defaultPadding * 1.5,
+                vertical: defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
               ),
-              onPressed: () async {
-                String result = await Wscalls.updateClass(
-                    imageLogo: imageLogotipo,
-                    imageHero: imageDestacada,
-                    imageWordMark: imageDenominativa,
-                    backgroundColor: color.hex,
-                    pointsStart: _puntosiniciales.text,
-                    pointsLabel: _nombrepuntos.text,
-                    title: _titulotarjeta.text,
-                    subtitle: _subtitulotarjeta.text,
-                    id: '0');
-                print(result);
-              },
-              icon: Icon(Icons.save),
-              label: Text("Save changes"),
             ),
+            onPressed: () async {
+              String result = await Wscalls.updateClass(
+                  imageLogo: imageLogotipo,
+                  imageHero: imageDestacada,
+                  imageWordMark: imageDenominativa,
+                  backgroundColor: color.hex,
+                  pointsStart: _puntosiniciales.text,
+                  pointsLabel: _nombrepuntos.text,
+                  title: _titulotarjeta.text,
+                  subtitle: _subtitulotarjeta.text,
+                  id: '0');
+              print(result);
+            },
+            icon: Icon(Icons.save),
+            label: Text("Save changes"),
           ),
         ],
       ),
