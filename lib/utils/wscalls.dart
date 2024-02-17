@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:cross_file/cross_file.dart';
-import 'package:http/http.dart' as http;
 
 class Wscalls {
   static String baseUrl = 'https://wallets.snowcode.app';
@@ -76,11 +76,26 @@ class Wscalls {
   }
 
   static Future<String> createCompany(String companyName, String phone, String passTypeIdentifier) async {
+    // Prepare the JSON payload
+    Map<String, dynamic> data = {
+      'companyName': companyName,
+      'phone': phone,
+      'passTypeIdentifier': passTypeIdentifier,
+    };
+
+    // Convert data to JSON
+    String jsonData = jsonEncode(data);
+
     try {
       // Make the HTTP POST request
       final response = await http.post(
-        Uri.parse('$baseUrl/create_company/$companyName/$phone/$passTypeIdentifier'),
+        Uri.parse('$baseUrl/createCompany'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonData,
       );
+
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, return the company ID
         return response.body;
@@ -89,7 +104,44 @@ class Wscalls {
         throw Exception('Failed to create company: ${response.reasonPhrase}');
       }
     } catch (e) {
-      throw Exception('Error creating company: $e');
+      // Handle any errors that occurred during the request
+      throw Exception('Failed to create company: $e');
+    }
+  }
+
+  static Future<String> createForm(String idCompany, String colorPrimary, String colorSecondary, String colorTertiary, String colorQuaternary) async {
+    // Prepare the JSON payload
+    Map<String, dynamic> data = {
+      'idCompany': idCompany,
+      'colorPrimary': colorPrimary,
+      'colorSecondary': colorSecondary,
+      'colorTertiary': colorTertiary,
+      'colorQuaternary': colorQuaternary,
+    };
+
+    // Convert data to JSON
+    String jsonData = jsonEncode(data);
+
+    try {
+      // Make the HTTP POST request
+      final response = await http.post(
+        Uri.parse('$baseUrl/createForm'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonData,
+      );
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, return the success message
+        return response.body;
+      } else {
+        // If the server returns an error response, throw an exception
+        throw Exception('Failed to create form: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      // Handle any errors that occurred during the request
+      throw Exception('Failed to create form: $e');
     }
   }
 }

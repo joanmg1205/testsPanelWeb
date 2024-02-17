@@ -1,5 +1,3 @@
-
-
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,18 +12,17 @@ class HomeLocation extends BeamLocation<BeamState> {
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) => [
-    BeamPage(
-      key: ValueKey('home-${DateTime.now()}'),
-      title: 'Home',
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => MenuAppController(),
+        BeamPage(
+          key: ValueKey('home-${DateTime.now()}'),
+          title: 'Home',
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => MenuAppController(),
+              ),
+            ],
+            child: MainScreen(),
           ),
-        ],
-        child: MainScreen(),
-      ),
-    )
-  ];
+        )
+      ];
 }
-

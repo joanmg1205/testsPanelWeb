@@ -1,5 +1,7 @@
 import 'package:admin/controllers/MenuAppController.dart';
 import 'package:admin/responsive.dart';
+import 'package:admin/screens/create_card/create_card_screen.dart';
+import 'package:admin/screens/create_company/create_company_screen.dart';
 import 'package:admin/screens/dashboard/dashboard_screen.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +102,7 @@ class ModifyCardLocation extends BeamLocation<BeamState> {
     BeamPage(
       key: ValueKey('modifycard'),
       title: 'modifycard',
-      child: ModifyCardScreen(),
+      child: CreateCardScreen(),
     )
   ];
 }

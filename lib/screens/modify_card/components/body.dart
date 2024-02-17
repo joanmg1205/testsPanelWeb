@@ -6,16 +6,16 @@ import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FormComponent extends StatefulWidget {
-  const FormComponent({
+class Body extends StatefulWidget {
+  const Body({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<FormComponent> createState() => _FormComponentState();
+  State<Body> createState() => _BodyState();
 }
 
-class _FormComponentState extends State<FormComponent> {
+class _BodyState extends State<Body> {
   late XFile imageLogotipo;
   late XFile imageDestacada;
   late XFile imageDenominativa;

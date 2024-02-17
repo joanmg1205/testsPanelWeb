@@ -1,10 +1,9 @@
-import 'package:admin/screens/modify_card/components/body.dart';
-import 'package:admin/screens/modify_card/components/header.dart';
-import 'package:flutter/material.dart';
 import 'package:admin/constants.dart';
+import 'package:admin/screens/create_company/components/body.dart';
+import 'package:flutter/material.dart';
+import 'components/header.dart';
 
-class ModifyCardScreen extends StatelessWidget {
-
+class CreateCompanyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -14,8 +13,10 @@ class ModifyCardScreen extends StatelessWidget {
         child: Column(
           children: [
             Header(),
-            SizedBox(height: defaultPadding,),
-            Body()
+            SizedBox(
+              height: defaultPadding,
+            ),
+            CreateCompanyBody(),
           ],
         ),
       ),
