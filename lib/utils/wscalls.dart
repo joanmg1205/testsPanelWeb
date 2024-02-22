@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:cross_file/cross_file.dart';
+import 'dart:convert';
+import 'dart:html';
 
 class Wscalls {
   static String baseUrl = 'https://wallets.snowcode.app';
@@ -20,7 +23,8 @@ class Wscalls {
     final url = Uri.parse('$baseUrl/updateClass');
 
     try {
-      final request = http.MultipartRequest('POST', url);
+      var request = http.MultipartRequest('POST', url);
+
       request.fields['backgroundColor'] = backgroundColor;
       request.fields['pointsStart'] = pointsStart;
       request.fields['pointsLabel'] = pointsLabel;
@@ -28,20 +32,12 @@ class Wscalls {
       request.fields['subtitle'] = subtitle;
       request.fields['id'] = id;
 
-      var compressedImageLogo = await FlutterNativeImage.compressImage(imageLogo.path, quality: 80);
-      var compressedImageLogoFile = await http.MultipartFile.fromPath('image', compressedImageLogo.path);
-      request.files.add(compressedImageLogoFile);
+      request.files.add(http.MultipartFile.fromBytes('image', await imageLogo.readAsBytes(), filename: 'image_logo.jpg'));
+      request.files.add(http.MultipartFile.fromBytes('image', await imageHero.readAsBytes(), filename: 'image_hero.jpg'));
+      request.files.add(http.MultipartFile.fromBytes('image', await imageWordMark.readAsBytes(), filename: 'image_wordmark.jpg'));
 
-      var compressedImageHero = await FlutterNativeImage.compressImage(imageHero.path, quality: 80);
-      var compressedImageHeroFile = await http.MultipartFile.fromPath('image', compressedImageHero.path);
-      request.files.add(compressedImageHeroFile);
-
-      var compressedImageWordMark = await FlutterNativeImage.compressImage(imageWordMark.path, quality: 80);
-      var compressedImageWordMarkFile = await http.MultipartFile.fromPath('image', compressedImageWordMark.path);
-      request.files.add(compressedImageWordMarkFile);
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -65,10 +61,10 @@ class Wscalls {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
+        final jsonResponse = json.decode(response.body.substring(0, response.body.length));
         return jsonResponse;
       } else {
-        throw Exception('Failed to load class');
+        throw Exception('Failed to load class: ${response.reasonPhrase}');
       }
     } catch (e) {
       throw Exception('Failed to connect to the server: $e');

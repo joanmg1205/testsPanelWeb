@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'components/body.dart';
 import 'components/header.dart';
 
-class CreateCardScreen extends StatelessWidget {
+class CreateFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

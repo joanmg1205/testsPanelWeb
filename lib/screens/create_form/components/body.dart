@@ -22,6 +22,7 @@ class _BodyState extends State<Body> {
   Color tertiaryColor = Colors.lightBlue;
   bool quaternaryColorSelected = false;
   Color quaternaryColor = Colors.lightBlue;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +269,37 @@ class _BodyState extends State<Body> {
                             ));
                   },
                   label: Text('Editar')),
+            ],
+          ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          Stack(
+            children: [
+              SizedBox(
+                child: Container(
+                  decoration: ShapeDecoration(
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                width: 300,
+                height: 200,
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Checkbox(
+                  value: isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      isChecked = !isChecked;
+                    });
+                  },
+                ),
+              )
             ],
           ),
           SizedBox(

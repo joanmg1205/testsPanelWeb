@@ -36,7 +36,7 @@ dependencies:
   beamer: ^2.0.0-dev.0
   cross_file: ^0.3.3+8
   flex_color_picker: ^3.3.0
-  flutter_native_image: ^0.0.6+1
+  flutter_native_image: ^0.0.6
 
 dev_dependencies:
   flutter_test:

@@ -17,8 +17,11 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   late XFile imageLogotipo;
+  bool imageLogotipoSelected = false;
   late XFile imageDestacada;
+  bool imageDestacadaSelected = false;
   late XFile imageDenominativa;
+  bool imageDenominativaSelected = false;
   TextEditingController _puntosiniciales = new TextEditingController();
   TextEditingController _nombrepuntos = new TextEditingController();
   TextEditingController _titulotarjeta = new TextEditingController();
@@ -26,22 +29,27 @@ class _BodyState extends State<Body> {
   bool showColors = false;
   Color color = Colors.blue;
   late Color colorSelector;
-  String id = "0";
+  String id = "2e98ff8e-0821-4584-93a9-f02c8f69a691_1708164934";
 
   @override
   void initState() {
     super.initState();
-    //fetchData();
+    fetchData();
   }
 
   void fetchData() async {
-    Map<String, dynamic> data = await Wscalls.getClass(id);
-    setState(() {
-      _puntosiniciales.text = data['pointsStart'];
-      _nombrepuntos.text = data['pointsLabel'];
-      _titulotarjeta.text = data['title'];
-      _subtitulotarjeta.text = data['subtitle'];
-    });
+    try {
+      Map<String, dynamic> data = await Wscalls.getClass(id);
+      imageLogotipo = XFile(data['message'][1] == null ? "" : data['message'][1]);
+      imageDestacada = XFile(data['message'][2] == null ? "" : data['message'][2]);
+      imageDenominativa = XFile(data['message'][3] == null ? "" : data['message'][3]);
+      _puntosiniciales.text = data['message'][5].toString();
+      _nombrepuntos.text = data['message'][6];
+      _titulotarjeta.text = data['message'][7];
+      _subtitulotarjeta.text = data['message'][8];
+    } on Exception catch (e) {
+      print("Programm error: $e");
+    }
   }
 
   @override
@@ -72,6 +80,7 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
+                      imageLogotipoSelected = true;
                       imageLogotipo = image;
                     });
                   }
@@ -92,6 +101,7 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
+                      imageDestacadaSelected = true;
                       imageDestacada = image;
                     });
                   }
@@ -112,6 +122,7 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
+                      imageDenominativaSelected = true;
                       imageDenominativa = image;
                     });
                   }
@@ -134,37 +145,46 @@ class _BodyState extends State<Body> {
                   onPressed: () {
                     colorSelector = color;
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context) => Dialog(
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: Column(children: [
-                                SizedBox(height: defaultPadding,),
-                                ColorPicker(
-                                    color: colorSelector,
-                                    pickersEnabled: {ColorPickerType.primary: false, ColorPickerType.accent: false, ColorPickerType.wheel: true},
-                                    onColorChanged: (Color color) => setState(() {
-                                          colorSelector = color;
-                                        })),
-                                SizedBox(height: defaultPadding,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(onPressed: (() {
-                                      Navigator.pop(context);
-                                    }), child: Text('Cancel')),
-                                    SizedBox(width: defaultPadding),
-                                    TextButton(onPressed: (() {
-                                      setState(() {
-                                        color = colorSelector;
-                                      });
-                                      Navigator.pop(context);
-                                    }), child: Text('Save')),
-                                  ],
-                                ),
-                              ]),
-                            ),
-                          ));},
+                        context: context,
+                        builder: (BuildContext context) => Dialog(
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Column(children: [
+                                  SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  ColorPicker(
+                                      color: colorSelector,
+                                      pickersEnabled: {ColorPickerType.primary: false, ColorPickerType.accent: false, ColorPickerType.wheel: true},
+                                      onColorChanged: (Color color) => setState(() {
+                                            colorSelector = color;
+                                          })),
+                                  SizedBox(
+                                    height: defaultPadding,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextButton(
+                                          onPressed: (() {
+                                            Navigator.pop(context);
+                                          }),
+                                          child: Text('Cancel')),
+                                      SizedBox(width: defaultPadding),
+                                      TextButton(
+                                          onPressed: (() {
+                                            setState(() {
+                                              color = colorSelector;
+                                            });
+                                            Navigator.pop(context);
+                                          }),
+                                          child: Text('Save')),
+                                    ],
+                                  ),
+                                ]),
+                              ),
+                            ));
+                  },
                   label: Text('Mostrar')),
             ],
           ),
@@ -286,7 +306,7 @@ class _BodyState extends State<Body> {
                   pointsLabel: _nombrepuntos.text,
                   title: _titulotarjeta.text,
                   subtitle: _subtitulotarjeta.text,
-                  id: '0');
+                  id: this.id);
               print(result);
             },
             icon: Icon(Icons.save),
