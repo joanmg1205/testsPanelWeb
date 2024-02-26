@@ -105,7 +105,7 @@ class Wscalls {
     }
   }
 
-  static Future<String> createForm(String idCompany, String colorPrimary, String colorSecondary, String colorTertiary, String colorQuaternary) async {
+  static Future<String> createForm(String idCompany, String colorPrimary, String colorSecondary, String colorTertiary, String colorQuaternary, String template) async {
     // Prepare the JSON payload
     Map<String, dynamic> data = {
       'idCompany': idCompany,
@@ -113,6 +113,7 @@ class Wscalls {
       'colorSecondary': colorSecondary,
       'colorTertiary': colorTertiary,
       'colorQuaternary': colorQuaternary,
+      'template': template,
     };
 
     // Convert data to JSON

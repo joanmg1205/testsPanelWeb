@@ -22,7 +22,8 @@ class _BodyState extends State<Body> {
   Color tertiaryColor = Colors.lightBlue;
   bool quaternaryColorSelected = false;
   Color quaternaryColor = Colors.lightBlue;
-  bool isChecked = false;
+  bool showList = false;
+  int isChecked = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -274,34 +275,172 @@ class _BodyState extends State<Body> {
           SizedBox(
             height: defaultPadding,
           ),
-          Stack(
+          Row(
             children: [
               SizedBox(
-                child: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                width: MediaQuery.of(context).size.width / 5,
+                child: Text(
+                  'Templates',
                 ),
-                width: 300,
-                height: 200,
               ),
-              Positioned(
-                top: 10,
-                right: 10,
-                child: Checkbox(
-                  value: isChecked,
-                  onChanged: (value) {
+              ElevatedButton.icon(
+                  onPressed: () {
                     setState(() {
-                      isChecked = !isChecked;
+                      showList = !showList;
                     });
                   },
-                ),
-              )
+                  icon: Icon(Icons.list),
+                  label: Text('Mostrar'))
             ],
           ),
+          SizedBox(
+            height: defaultPadding,
+          ),
+          showList
+              ? Column(
+                children: [
+                  Row(
+                      children: [
+                        Stack(
+                          children: [
+                            SizedBox(
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              width: 300,
+                              height: 200,
+                            ),
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Checkbox(
+                                value: isChecked == 1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (isChecked == 1) {
+                                      isChecked = 0;
+                                    } else {
+                                      isChecked = 1;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: defaultPadding,),
+                        Stack(
+                          children: [
+                            SizedBox(
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              width: 300,
+                              height: 200,
+                            ),
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Checkbox(
+                                value: isChecked == 2,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (isChecked == 2) {
+                                      isChecked = 0;
+                                    } else {
+                                      isChecked = 2;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: defaultPadding,),
+                    Row(
+                      children: [
+                        Stack(
+                          children: [
+                            SizedBox(
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              width: 300,
+                              height: 200,
+                            ),
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Checkbox(
+                                value: isChecked == 3,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (isChecked == 3) {
+                                      isChecked = 0;
+                                    } else {
+                                      isChecked = 3;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: defaultPadding,),
+                        Stack(
+                          children: [
+                            SizedBox(
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              width: 300,
+                              height: 200,
+                            ),
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: Checkbox(
+                                value: isChecked == 4,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (isChecked == 4) {
+                                      isChecked = 0;
+                                    } else {
+                                      isChecked = 4;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                ],
+              )
+              : Container(),
           SizedBox(
             height: defaultPadding,
           ),
@@ -314,8 +453,8 @@ class _BodyState extends State<Body> {
             ),
             onPressed: () async {
               try {
-                if (primaryColorSelected && secondaryColorSelected && tertiaryColorSelected && quaternaryColorSelected) {
-                  String result = await Wscalls.createForm('7b69a02f-89a7-417d-9729-54d7ed59eb12_1708189716', primaryColor.hex, secondaryColor.hex, tertiaryColor.hex, quaternaryColor.hex);
+                if (primaryColorSelected && secondaryColorSelected && tertiaryColorSelected && quaternaryColorSelected && isChecked != 0) {
+                  String result = await Wscalls.createForm('7b69a02f-89a7-417d-9729-54d7ed59eb12_1708189716', primaryColor.hex, secondaryColor.hex, tertiaryColor.hex, quaternaryColor.hex, (isChecked - 1).toString());
                   print(result);
                 } else {
                   print('asd');
