@@ -16,12 +16,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  late XFile imageLogotipo;
-  bool imageLogotipoSelected = false;
-  late XFile imageDestacada;
-  bool imageDestacadaSelected = false;
-  late XFile imageDenominativa;
-  bool imageDenominativaSelected = false;
+  late XFile imageLogo;
+  int imageLogoAction = 1;
+  late XFile imageHero;
+  bool isImageHeroStamp = false;
+  bool showImageHeroStamp = false;
+  int imageHeroAction = 1;
+  late XFile imageWordMark;
+  int imageWordMarkAction = 1;
   TextEditingController _puntosiniciales = new TextEditingController();
   TextEditingController _nombrepuntos = new TextEditingController();
   TextEditingController _titulotarjeta = new TextEditingController();
@@ -40,9 +42,9 @@ class _BodyState extends State<Body> {
   void fetchData() async {
     try {
       Map<String, dynamic> data = await Wscalls.getClass(id);
-      imageLogotipo = XFile(data['message'][1] == null ? "" : data['message'][1]);
-      imageDestacada = XFile(data['message'][2] == null ? "" : data['message'][2]);
-      imageDenominativa = XFile(data['message'][3] == null ? "" : data['message'][3]);
+      imageLogo = XFile(data['message'][1] == null ? "" : data['message'][1]);
+      imageHero = XFile(data['message'][2] == null ? "" : data['message'][2]);
+      imageWordMark = XFile(data['message'][3] == null ? "" : data['message'][3]);
       _puntosiniciales.text = data['message'][5].toString();
       _nombrepuntos.text = data['message'][6];
       _titulotarjeta.text = data['message'][7];
@@ -80,8 +82,7 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
-                      imageLogotipoSelected = true;
-                      imageLogotipo = image;
+                      imageLogo = image;
                     });
                   }
                 },
@@ -101,13 +102,67 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
-                      imageDestacadaSelected = true;
-                      imageDestacada = image;
+                      imageHero = image;
                     });
                   }
                 },
                 label: Text('Subir')),
+            Checkbox(
+                value: isImageHeroStamp,
+                onChanged: ((value) {
+                  setState(() {
+                    isImageHeroStamp = value!;
+                  });
+                }))
           ]),
+          Row(children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 5,
+            ),
+            ElevatedButton.icon(
+                icon: Icon(Icons.image),
+                onPressed: () {
+                  setState(() {
+                    showImageHeroStamp = !showImageHeroStamp;
+                  });
+                },
+                label: showImageHeroStamp == true ? Text('Esconder') : Text('Mostrar')),
+          ]),
+          showImageHeroStamp == true
+              ? Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.all(defaultPadding),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 5,
+                              child: Text(
+                                'Imagen destacada $index',
+                              ),
+                            ),
+                            ElevatedButton.icon(
+                                icon: Icon(Icons.image),
+                                onPressed: () async {
+                                  XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                  if (image != null) {
+                                    setState(() {
+                                      imageHero = image;
+                                    });
+                                  }
+                                },
+                                label: Text('Subir')),
+                          ],
+                        );
+                      }),
+                )
+              : Container(),
           SizedBox(height: defaultPadding),
           Row(children: [
             SizedBox(
@@ -122,8 +177,7 @@ class _BodyState extends State<Body> {
                   XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
-                      imageDenominativaSelected = true;
-                      imageDenominativa = image;
+                      imageWordMark = image;
                     });
                   }
                 },
@@ -298,14 +352,15 @@ class _BodyState extends State<Body> {
             ),
             onPressed: () async {
               String result = await Wscalls.updateClass(
-                  imageLogo: imageLogotipo,
-                  imageHero: imageDestacada,
-                  imageWordMark: imageDenominativa,
+                  imageLogo: imageLogo,
+                  imageHero: imageHero,
+                  imageWordMark: imageWordMark,
                   backgroundColor: color.hex,
                   pointsStart: _puntosiniciales.text,
                   pointsLabel: _nombrepuntos.text,
                   title: _titulotarjeta.text,
                   subtitle: _subtitulotarjeta.text,
+                  stamp: isImageHeroStamp == true ? '1' : '0',
                   id: this.id);
               print(result);
             },

@@ -10,14 +10,17 @@ class Wscalls {
   static String baseUrl = 'https://wallets.snowcode.app';
 
   static Future<String> updateClass({
-    required XFile imageLogo,
-    required XFile imageHero,
-    required XFile imageWordMark,
+    XFile? imageLogo,
+    //required List<int> imageHeroActions,
+    //List<XFile>? imagesHero,
+    XFile? imageHero,
+    XFile? imageWordMark,
     required String backgroundColor,
     required String pointsStart,
     required String pointsLabel,
     required String title,
     required String subtitle,
+    required String stamp,
     required String id,
   }) async {
     final url = Uri.parse('$baseUrl/updateClass');
@@ -25,16 +28,24 @@ class Wscalls {
     try {
       var request = http.MultipartRequest('POST', url);
 
+      request.headers['Content-Type'] = 'multipart/form-data';
+
+      if (imageLogo != null) {
+        request.files.add(http.MultipartFile.fromBytes('imageLogo', await imageLogo.readAsBytes(), filename: 'image_logo.jpg'));
+      }
+      if (imageHero != null) {
+        request.files.add(http.MultipartFile.fromBytes('imageHero', await imageHero.readAsBytes(), filename: 'image_logo.jpg'));
+      }
+      if (imageWordMark != null) {
+        request.files.add(http.MultipartFile.fromBytes('imageWordMark', await imageWordMark.readAsBytes(), filename: 'image_logo.jpg'));
+      }
       request.fields['backgroundColor'] = backgroundColor;
       request.fields['pointsStart'] = pointsStart;
       request.fields['pointsLabel'] = pointsLabel;
       request.fields['title'] = title;
       request.fields['subtitle'] = subtitle;
-      request.fields['id'] = id;
-
-      request.files.add(http.MultipartFile.fromBytes('image', await imageLogo.readAsBytes(), filename: 'image_logo.jpg'));
-      request.files.add(http.MultipartFile.fromBytes('image', await imageHero.readAsBytes(), filename: 'image_hero.jpg'));
-      request.files.add(http.MultipartFile.fromBytes('image', await imageWordMark.readAsBytes(), filename: 'image_wordmark.jpg'));
+      request.fields['idCompany'] = id;
+      request.fields['stamp'] = stamp;
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -71,10 +82,10 @@ class Wscalls {
     }
   }
 
-  static Future<String> createCompany(String companyName, String phone, String passTypeIdentifier) async {
+  static Future<String> createClass(String companyName, String phone, String passTypeIdentifier) async {
     // Prepare the JSON payload
     Map<String, dynamic> data = {
-      'companyName': companyName,
+      'name': companyName,
       'phone': phone,
       'passTypeIdentifier': passTypeIdentifier,
     };
@@ -85,7 +96,7 @@ class Wscalls {
     try {
       // Make the HTTP POST request
       final response = await http.post(
-        Uri.parse('$baseUrl/createCompany'),
+        Uri.parse('$baseUrl/createClass'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

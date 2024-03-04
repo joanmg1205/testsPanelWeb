@@ -102,7 +102,7 @@ class ModifyCardLocation extends BeamLocation<BeamState> {
     BeamPage(
       key: ValueKey('modifycard'),
       title: 'modifycard',
-      child: CreateFormScreen(),
+      child: ModifyCardScreen(),
     )
   ];
 }

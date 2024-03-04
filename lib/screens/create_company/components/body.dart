@@ -86,7 +86,7 @@ class _CreateCompanyBodyState extends State<CreateCompanyBody> {
             ),
             onPressed: () async {
               try {
-                String result = await Wscalls.createCompany(_name.text, _phone.text, _passTypeIdentifier.text);
+                String result = await Wscalls.createClass(_name.text, _phone.text, _passTypeIdentifier.text);
                 print(result);
               } on Exception catch (e) {
                 print(e);
